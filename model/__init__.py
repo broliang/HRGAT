@@ -1,0 +1,1 @@
+from .model import RGAT_DistMult, RGAT_ConvE, RGCN_ConvE, ConvE
