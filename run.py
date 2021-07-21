@@ -255,7 +255,7 @@ class Runner(object):
         return edge_type, norm
 
     def get_model(self):
-        if self.p.score_func.lower() == 'distmult':
+        if self.p.model_func.lower() == 'distmult':
             model = RGAT_DistMult(num_ent=self.num_ent, num_rel=self.num_rels, num_base=self.p.num_bases,
                                      init_dim=self.p.init_dim, gcn_dim=self.p.gcn_dim, embed_dim=self.p.embed_dim,
                                      n_layer=self.p.n_layer, edge_type=self.edge_type, edge_norm=self.edge_norm,
@@ -264,7 +264,7 @@ class Runner(object):
                                      use_text = self.p.text, use_img = self.p.img, use_attr = self.p.attr,
                                      device = self.device, bias=self.p.bias, gcn_drop=self.p.gcn_drop, opn=self.p.opn,
                                      hid_drop=self.p.hid_drop)
-        elif self.p.score_func.lower() == 'conve':
+        elif self.p.model_func.lower() == 'conve':
             model = RGAT_ConvE(num_ent=self.num_ent, num_rel=self.num_rels, num_base=self.p.num_bases,
                                   init_dim=self.p.init_dim, gcn_dim=self.p.gcn_dim, embed_dim=self.p.embed_dim,
                                   n_layer=self.p.n_layer, edge_type=self.edge_type, edge_norm=self.edge_norm,
@@ -275,7 +275,7 @@ class Runner(object):
                                   hid_drop=self.p.hid_drop, input_drop=self.p.input_drop,
                                   conve_hid_drop=self.p.conve_hid_drop, feat_drop=self.p.feat_drop,
                                   num_filt=self.p.num_filt, ker_sz=self.p.ker_sz, k_h=self.p.k_h, k_w=self.p.k_w)
-        elif self.p.score_func.lower() == 'rgcn':
+        elif self.p.model_func.lower() == 'rgcn':
             model = RGCN_ConvE(num_ent=self.num_ent, num_rel=self.num_rels, num_base=self.p.num_bases,
                                   init_dim=self.p.init_dim, gcn_dim=self.p.gcn_dim, embed_dim=self.p.embed_dim,
                                   n_layer=self.p.n_layer, edge_type=self.edge_type, edge_norm=self.edge_norm,
@@ -286,7 +286,7 @@ class Runner(object):
                                   hid_drop=self.p.hid_drop, input_drop=self.p.input_drop,
                                   conve_hid_drop=self.p.conve_hid_drop, feat_drop=self.p.feat_drop,
                                   num_filt=self.p.num_filt, ker_sz=self.p.ker_sz, k_h=self.p.k_h, k_w=self.p.k_w)
-        elif self.p.score_func.lower() == 'simpleconve':
+        elif self.p.model_func.lower() == 'simpleconve':
             model = ConvE(num_ent=self.num_ent, num_rel=self.num_rels, num_base=self.p.num_bases,
                                   init_dim=self.p.init_dim, gcn_dim=self.p.gcn_dim, embed_dim=self.p.embed_dim,
                                   n_layer=self.p.n_layer, edge_type=self.edge_type, edge_norm=self.edge_norm,
@@ -298,7 +298,7 @@ class Runner(object):
                                   conve_hid_drop=self.p.conve_hid_drop, feat_drop=self.p.feat_drop,
                                   num_filt=self.p.num_filt, ker_sz=self.p.ker_sz, k_h=self.p.k_h, k_w=self.p.k_w)
         else:
-            raise KeyError(f'score function {self.p.score_func} not recognized.')
+            raise KeyError(f'score function {self.p.model_func} not recognized.')
         model.to(self.device)
         return model
 
@@ -309,7 +309,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--name', default='test_run', help='Set run name for saving/restoring models')
     parser.add_argument('--data', dest='dataset', default='FB15k-237', help='Dataset to use, default: FB15k-237')
-    parser.add_argument('--score_func', dest='score_func', default='conve',
+    parser.add_argument('--model_func', dest='model_func', default='conve',
                         help='Score Function for Link prediction')
     parser.add_argument('--opn', dest='opn', default='corr', help='Composition Operation to be used in CompGCN')
 
@@ -357,7 +357,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if not args.restore:
         args.name = time.strftime('%Y_%m_%d') + '_' + time.strftime(
-            '%H:%M:%S') + '-' + args.score_func.lower() + '-' + args.opn
+            '%H:%M:%S') + '-' + args.model_func.lower() + '-' + args.opn
 
     random.seed(args.seed)
     np.random.seed(args.seed)
