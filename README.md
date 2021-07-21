@@ -2,8 +2,8 @@
 The code for hyper-node relational graph attention network
 
 ## requirement
-torch == 1.7.0
-dgl == 0.4.2
+torch == 1.7.0,
+dgl == 0.4.2,
 sentence-bert
 
 ### Train Model
